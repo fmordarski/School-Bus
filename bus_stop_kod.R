@@ -52,7 +52,7 @@ f(b, Tk)
 
 t = 100
 alpha = 0.99
-maxIt = 50
+maxIt = 100
 
 SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
 {
@@ -70,12 +70,10 @@ SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
     # Losowanie kandydata na rozwiazanie.
     stop = sample.int(length(stops)-1, 1)
     bus = sample.int(buses, 1)
-    print(stop)
-    print(bus)
     x_c = x
     for (b in 1:buses){
       if (is.na(match(stop, x[[b]])) == FALSE){
-        if (length(x[[b]] > 2)){
+        if (length(x[[b]]) > 2){
         sol = b
         x_c[[b]] = x_c[[b]][!x_c[[b]] %in% stop]
         x_c[[bus]] = sort(append(x_c[[bus]], stop))
