@@ -42,10 +42,6 @@ f = function(b, D)
     { 
       y_list[bus] = y_list[bus] + Y[b[[bus]][n]]
       d_list[bus] = d_list[bus] + D[b[[bus]][n], b[[bus]][n+1]] * y_list[bus]
-      if (bus == 1){
-        print(y_list[bus])
-        print(d_list[bus])
-      }
       }
   }
   
@@ -54,4 +50,59 @@ f = function(b, D)
 
 f(b, Tk)
 
+t = 100
+alpha = 0.99
+maxIt = 50
+
+SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
+{
+ 
+  out = list()
+  out$x.hist = vector(mode = "list", length = maxIt)
+  out$x.hist[[1]] = x
+  out$f.hist = vector(mode = "list", length = maxIt)
+  out$f.hist[[1]] = f(x, D)
+  out$t.hist = vector(mode = "list", length = maxIt)
+  out$t.hist[[1]] = t
+  
+  for (i in 1 : maxIt)
+  {
+    # Losowanie kandydata na rozwiazanie.
+    stop = sample.int(length(stops)-1, 1)
+    bus = sample.int(buses, 1)
+    print(stop)
+    print(bus)
+    x_c = x
+    for (b in 1:buses){
+      if (is.na(match(stop, x[[b]])) == FALSE){
+        if (length(x[[b]] > 2)){
+        sol = b
+        x_c[[b]] = x_c[[b]][!x_c[[b]] %in% stop]
+        x_c[[bus]] = sort(append(x_c[[bus]], stop))
+        }
+      }
+    }
+    
+    # Symulacja przejscia do kandydata na rozwiazanie.
+    A = min(1, exp(-(f(x_c, D) - f(x, D)) / t))
+    u = runif(1)
+    if (u < A)
+    {
+      x = x_c
+    }
+    
+    # Aktualizacja wartosci temperatury.
+    t = alpha * t
+    
+    out$x.hist[[i+1]] = x
+    out$f.hist[[i+1]] = f(x, D)
+    out$t.hist[[i+1]] = t
+  }
+  
+  out$x.opt = x
+  
+  return(out)
+}
+
+SA(S, B, b, Tk, f, delta, t, alpha, maxIt)
 
