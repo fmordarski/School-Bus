@@ -25,12 +25,25 @@ C = c(50,75,60)
 
 Y = sample.int(15, 9)
 
+#Wylosowana trasa poczatkowa b
+b = split(1:9, sample(3, 9 , repl = TRUE))
 
-b1 = c(1,4,10)
-b2 = c(2,3,5,8, 10)
-b3 = c(6,7,9,10)
+for (i in 1:length(b))
+{
+  b[[i]] = c(b[[i]], 10)
+  
+}
 
-b = list(b1, b2, b3)
+
+
+#Ustalona trasa poczatkowa b
+#b1 = c(1,4,10)
+#b2 = c(2,3,5,8, 10)
+#b3 = c(6,7,9,10)
+
+#b = list(b1, b2, b3)
+
+#Funkcja kosztow
 f = function(b, D)
 {
   number_buses = length(b)
