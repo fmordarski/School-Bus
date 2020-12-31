@@ -60,6 +60,5 @@ f = function(b1, b2, b3, D)
 }
 
 f(b1,b2,b3, Tk)
-print('hello')
 
 
