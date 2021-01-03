@@ -13,7 +13,7 @@ colnames(Tk) <- c(1:10)
 rownames(Tk) <- c(1:10)
 Tk <- as.matrix(Tk)
 
-
+set.seed(1234)
 
 ####################### Zmienne #########################
 B <- 3
@@ -26,22 +26,22 @@ C = c(50,75,60)
 Y = sample.int(15, 9)
 
 #Wylosowana trasa poczatkowa b
-b = split(1:9, sample(3, 9 , repl = TRUE))
-
-for (i in 1:length(b))
-{
-  b[[i]] = c(b[[i]], 10)
-  
-}
+# b = split(1:9, sample(3, 9 , repl = TRUE))
+# 
+# for (i in 1:length(b))
+# {
+#   b[[i]] = c(b[[i]], 10)
+#   
+# }
 
 
 
 #Ustalona trasa poczatkowa b
-#b1 = c(1,4,10)
-#b2 = c(2,3,5,8, 10)
-#b3 = c(6,7,9,10)
+b1 = c(1,4,10)
+b2 = c(2,3,5,8, 10)
+b3 = c(6,7,9,10)
 
-#b = list(b1, b2, b3)
+b = list(b1, b2, b3)
 
 #Funkcja kosztow
 f = function(b, D)
@@ -83,13 +83,14 @@ SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
     # Losowanie kandydata na rozwiazanie.
     stop = sample.int(length(stops)-1, 1)
     bus = sample.int(buses, 1)
+    index = sample.int(length(x[[bus]])-1, 1)
     x_c = x
     for (b in 1:buses){
       if (is.na(match(stop, x[[b]])) == FALSE){
         if (length(x[[b]]) > 2){
         sol = b
         x_c[[b]] = x_c[[b]][!x_c[[b]] %in% stop]
-        x_c[[bus]] = sort(append(x_c[[bus]], stop))
+        x_c[[bus]] = append(x_c[[bus]], stop, after = index-1)
         }
       }
     }
@@ -111,6 +112,7 @@ SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
   }
   
   out$x.opt = x
+  out$f.opt = f(x, D)
   
   return(out)
 }
