@@ -1,7 +1,7 @@
 remove(list = ls())
 ####################### Macierz kosztow #############################
-# setwd('C:\\Users\\lenovo\\Desktop\\projekt\ nmo')
-setwd('C:/Users/Uzytkownik/Documents/Studia/nieklasyczne metody/School-Bus')
+setwd('C:\\Users\\lenovo\\Desktop\\project nmo')
+#setwd('C:/Users/Uzytkownik/Documents/Studia/nieklasyczne metody/School-Bus')
 koszty <- read.csv('koszty.csv', sep = ';', dec = ",")
 koszty <- koszty[,1:11]
 rownames(koszty) <- koszty[,1]
@@ -13,7 +13,7 @@ colnames(Tk) <- c(1:10)
 rownames(Tk) <- c(1:10)
 Tk <- as.matrix(Tk)
 
-set.seed(1234)
+
 
 ####################### Zmienne #########################
 B <- 3
@@ -26,13 +26,13 @@ C = c(50,75,60)
 Y = sample.int(15, 9)
 
 #Wylosowana trasa poczatkowa b
-# b = split(1:9, sample(3, 9 , repl = TRUE))
-# 
-# for (i in 1:length(b))
-# {
-#   b[[i]] = c(b[[i]], 10)
-#   
-# }
+#b = split(1:9, sample(3, 9 , repl = TRUE))
+#
+#for (i in 1:length(b))
+#{
+#  b[[i]] = c(b[[i]], 10)
+#  
+#}
 
 
 
@@ -55,7 +55,7 @@ f = function(b, D)
     { 
       y_list[bus] = y_list[bus] + Y[b[[bus]][n]]
       d_list[bus] = d_list[bus] + D[b[[bus]][n], b[[bus]][n+1]] * y_list[bus]
-      }
+    }
   }
   
   return(sum(d_list))
@@ -65,11 +65,11 @@ f(b, Tk)
 
 t = 100
 alpha = 0.99
-maxIt = 100
+maxIt = 1000
 
 SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
 {
- 
+  
   out = list()
   out$x.hist = vector(mode = "list", length = maxIt)
   out$x.hist[[1]] = x
@@ -88,9 +88,9 @@ SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
     for (b in 1:buses){
       if (is.na(match(stop, x[[b]])) == FALSE){
         if (length(x[[b]]) > 2){
-        sol = b
-        x_c[[b]] = x_c[[b]][!x_c[[b]] %in% stop]
-        x_c[[bus]] = append(x_c[[bus]], stop, after = index-1)
+          sol = b
+          x_c[[b]] = x_c[[b]][!x_c[[b]] %in% stop]
+          x_c[[bus]] = append(x_c[[bus]], stop, after = index-1)
         }
       }
     }
@@ -111,11 +111,17 @@ SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
     out$t.hist[[i+1]] = t
   }
   
-  out$x.opt = x
-  out$f.opt = f(x, D)
+  opt_f.hist = min(unlist(out$f.hist)) #optymalna wartosc funkcji celu (minimalna)
+  index.min = which.min(unlist(out$f.hist)) #indeks z optymalna wartoscia funkcji celu
+  x.opt = out$x.hist[[index.min]] #x optymalny, ktory wyznacza optymalna wartosc f. celu
   
-  return(out)
+  
+  ret = list(x.opt, opt_f.hist)
+  
+  return(ret)
+  
 }
 
 SA(S, B, b, Tk, f, delta, t, alpha, maxIt)
 
+ 
