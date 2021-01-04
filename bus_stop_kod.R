@@ -37,11 +37,23 @@ Y = sample.int(15, 9)
 
 
 #Ustalona trasa poczatkowa b
-b1 = c(1,4,10)
+b1 = c(1,4, 9, 10)
 b2 = c(2,3,5,8, 10)
-b3 = c(6,7,9,10)
+b3 = c(6,7,10)
 
 b = list(b1, b2, b3)
+
+
+constraint <- function(pass){
+  check <- c()
+  for(i in 1:3){
+    check[i] <- ifelse(pass[i]<45,1,0)
+  }
+  return(sum(check))}
+
+constraint(wyn)
+
+
 
 #Funkcja kosztow
 f = function(b, D)
@@ -61,13 +73,39 @@ f = function(b, D)
   return(sum(d_list))
 }
 
-f(b, Tk)
+
+f2 = function(b, D)
+{
+  number_buses = length(b)
+  n_list = lapply(b, length)
+  d_list = rep(0, number_buses)
+  y_list = rep(0, number_buses)
+  for (bus in 1:number_buses){
+    for (n in 1 : (n_list[[bus]]-1))
+    { 
+      y_list[bus] = y_list[bus] + Y[b[[bus]][n]]
+      
+    }
+  }
+  
+  return(y_list)
+}
+
+
+
+
+wyn =f2(b, Tk)
+
+
+
+
+
 
 t = 100
 alpha = 0.99
 maxIt = 1000
 
-SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
+SA = function(stops, buses, x, D, f, f2, constraint, delta, t, alpha, maxIt)
 {
   
   out = list()
@@ -91,9 +129,20 @@ SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
           sol = b
           x_c[[b]] = x_c[[b]][!x_c[[b]] %in% stop]
           x_c[[bus]] = append(x_c[[bus]], stop, after = index-1)
-        }
+          
+          wyn = f2(x_c, D)
+          cons = constraint(wyn)
+          
+        
+          }
+          
+          
+          
       }
+      
+      
     }
+    if (cons < 3) next
     
     # Symulacja przejscia do kandydata na rozwiazanie.
     A = min(1, exp(-(f(x_c, D) - f(x, D)) / t))
@@ -122,6 +171,6 @@ SA = function(stops, buses, x, D, f, delta, t, alpha, maxIt)
   
 }
 
-SA(S, B, b, Tk, f, delta, t, alpha, maxIt)
+SA(S, B, b, Tk, f, f2, constraint, delta, t, alpha, maxIt)
 
  
