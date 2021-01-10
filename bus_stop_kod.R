@@ -1,7 +1,8 @@
 remove(list = ls())
 ####################### Macierz kosztow #############################
-setwd('C:\\Users\\lenovo\\Desktop\\project nmo')
+#setwd('C:\\Users\\lenovo\\Desktop\\project nmo')
 #setwd('C:/Users/Uzytkownik/Documents/Studia/nieklasyczne metody/School-Bus')
+setwd("C:\\Users\\pc\\Desktop\\Nieklasyczne metody optymalizacji\\projekt")
 koszty <- read.csv('koszty.csv', sep = ';', dec = ",")
 koszty <- koszty[,1:11]
 rownames(koszty) <- koszty[,1]
@@ -14,17 +15,18 @@ rownames(Tk) <- c(1:10)
 Tk <- as.matrix(Tk)
 
 
-
+set.seed(1234)
 ####################### Zmienne #########################
 B <- 3
 K = 1:B
 # Tk ij - odleglosc podrozy z przystanku i do przystanka j  
 N = nrow(Tk)
 S = 1:N
-C = c(50,75,60)
 
-Y = sample.int(15, 9)
 
+Y = round(rnorm(9,mean=12,sd=3),0)
+Y
+sum(Y)
 #Wylosowana trasa poczatkowa b
 #b = split(1:9, sample(3, 9 , repl = TRUE))
 #
@@ -51,7 +53,6 @@ constraint <- function(pass){
   }
   return(sum(check))}
 
-constraint(wyn)
 
 
 
@@ -96,8 +97,7 @@ f2 = function(b, D)
 
 wyn =f2(b, Tk)
 
-
-
+constraint(wyn)
 
 
 
@@ -163,14 +163,13 @@ SA = function(stops, buses, x, D, f, f2, constraint, delta, t, alpha, maxIt)
   opt_f.hist = min(unlist(out$f.hist)) #optymalna wartosc funkcji celu (minimalna)
   index.min = which.min(unlist(out$f.hist)) #indeks z optymalna wartoscia funkcji celu
   x.opt = out$x.hist[[index.min]] #x optymalny, ktory wyznacza optymalna wartosc f. celu
+  f.hist = unlist(out$f.hist)
   
-  
-  ret = list(x.opt, opt_f.hist)
+  ret = list(x.opt, opt_f.hist,f.hist)
   
   return(ret)
   
 }
 
-SA(S, B, b, Tk, f, f2, constraint, delta, t, alpha, maxIt)
-
- 
+Z <- SA(S, B, b, Tk, f, f2, constraint, delta, t, alpha, maxIt)
+plot(1:length(Z[[3]]),Z[[3]])
