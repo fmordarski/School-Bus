@@ -1,0 +1,13 @@
+co to jest bus stop problem - nawiazanie do artykulu z Tanzanii - Kacper
+
+jaki algorytm - Kacper 
+
+input danych - Mati
+
+parametry do ustalenia - Mati
+
+nasze ograniczenia - Mati
+
+jak rozwiazalismy poszegolne ograniczenia
+
+rozszerzenie problemu o liczbe busow - Filip
