@@ -119,6 +119,15 @@ t = 100
 alpha = 0.99
 maxIt = 1000
 
+#Ustalona trasa poczatkowa b
+# b1 = c(1,4, 9, 10)
+# b2 = c(2,3,5,8, 10)
+# b3 = c(6,7,10)
+# 
+# 
+# 
+# b = list(b1, b2, b3)
+
 SA = function(stops, buses, x, D, f, f2, constraint, delta, t, alpha, maxIt)
 {
   
@@ -156,6 +165,7 @@ SA = function(stops, buses, x, D, f, f2, constraint, delta, t, alpha, maxIt)
       
       
     }
+    out$f.hist[[i+1]] = 100000
     if (exists("cons") == FALSE) next
     if (cons < buses) next
     
@@ -177,7 +187,7 @@ SA = function(stops, buses, x, D, f, f2, constraint, delta, t, alpha, maxIt)
   
   opt_f.hist = min(unlist(out$f.hist)) #optymalna wartosc funkcji celu (minimalna)
   index.min = which.min(unlist(out$f.hist)) #indeks z optymalna wartoscia funkcji celu
-  x.opt = out$x.hist[[index.min]] #x optymalny, ktory wyznacza optymalna wartosc f. celu
+  x.opt = out$x.hist[index.min] #x optymalny, ktory wyznacza optymalna wartosc f. celu
   f.hist = unlist(out$f.hist)
   
   ret = list(x.opt, opt_f.hist,f.hist)
