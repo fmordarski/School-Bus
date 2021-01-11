@@ -8,6 +8,6 @@ parametry do ustalenia - Mati
 
 nasze ograniczenia - Mati
 
-jak rozwiazalismy poszegolne ograniczenia
+jak rozwiazalismy poszegolne ograniczenia - Filip
 
 rozszerzenie problemu o liczbe busow - Filip
