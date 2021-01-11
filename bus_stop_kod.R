@@ -3,13 +3,8 @@ remove(list = ls())
 #setwd('C:\\Users\\lenovo\\Desktop\\project nmo')
 setwd('C:/Users/Uzytkownik/Documents/Studia/nieklasyczne metody/School-Bus')
 # setwd("C:\\Users\\pc\\Desktop\\Nieklasyczne metody optymalizacji\\projekt")
-<<<<<<< HEAD
-koszty <- read.csv('koszty.csv', sep = ';', dec = ",")
-koszty <- koszty[,1:11]
-=======
 koszty <- read.csv('koszty2.csv', sep = ';', dec = ",")
 koszty <- koszty[,1:13]
->>>>>>> working
 rownames(koszty) <- koszty[,1]
 koszty <- koszty[,2:13]
 koszty <- as.data.frame(koszty)
@@ -29,13 +24,7 @@ N = nrow(Tk)
 S = 1:N
 
 
-<<<<<<< HEAD
-Y = round(rnorm(9,mean=12,sd=3),0)
-=======
-
-
 Y = round(rnorm(11,mean=12,sd=3),0)
->>>>>>> working
 #Wylosowana trasa poczatkowa b
 
 
@@ -167,13 +156,8 @@ SA = function(stops, buses, x, D, f, f2, constraint, delta, t, alpha, maxIt)
       
       
     }
-<<<<<<< HEAD
-    if (exists('cons') == FALSE) next
-    if (cons < 3) next 
-=======
     if (exists("cons") == FALSE) next
     if (cons < buses) next
->>>>>>> working
     
     # Symulacja przejscia do kandydata na rozwiazanie.
     A = min(1, exp(-(f(x_c, D) - f(x, D)) / t))
@@ -208,6 +192,7 @@ plot(1:length(Z[[3]]),Z[[3]])
 max_buses = 10
 cost_bus = 20
 outputs = c()
+koszt_studenta_minuta = 1.6
 
 for(bus in 3:max_buses){
   # od tego rozwi¹zania wyznaczamy dla kolejnych busów
@@ -238,6 +223,6 @@ for(bus in 3:max_buses){
     
   }
   new_value <- SA(S, bus, initial_solution, Tk, f, f2, constraint, delta, t, alpha, maxIt)[[2]]
-  new_value <- 2*new_value+(bus*cost_bus)
+  new_value <- koszt_studenta_minuta*new_value+(bus*cost_bus)
   outputs <- append(outputs, new_value)
 }
