@@ -3,15 +3,20 @@ remove(list = ls())
 #setwd('C:\\Users\\lenovo\\Desktop\\project nmo')
 setwd('C:/Users/Uzytkownik/Documents/Studia/nieklasyczne metody/School-Bus')
 # setwd("C:\\Users\\pc\\Desktop\\Nieklasyczne metody optymalizacji\\projekt")
+<<<<<<< HEAD
 koszty <- read.csv('koszty.csv', sep = ';', dec = ",")
 koszty <- koszty[,1:11]
+=======
+koszty <- read.csv('koszty2.csv', sep = ';', dec = ",")
+koszty <- koszty[,1:13]
+>>>>>>> working
 rownames(koszty) <- koszty[,1]
-koszty <- koszty[,2:11]
+koszty <- koszty[,2:13]
 koszty <- as.data.frame(koszty)
 
 Tk <- koszty
-colnames(Tk) <- c(1:10)
-rownames(Tk) <- c(1:10)
+colnames(Tk) <- c(1:12)
+rownames(Tk) <- c(1:12)
 Tk <- as.matrix(Tk)
 
 
@@ -24,34 +29,42 @@ N = nrow(Tk)
 S = 1:N
 
 
+<<<<<<< HEAD
 Y = round(rnorm(9,mean=12,sd=3),0)
+=======
+
+
+Y = round(rnorm(11,mean=12,sd=3),0)
+>>>>>>> working
 #Wylosowana trasa poczatkowa b
-#b = split(1:9, sample(3, 9 , repl = TRUE))
-#
-#for (i in 1:length(b))
-#{
-#  b[[i]] = c(b[[i]], 10)
-#  
-#}
 
 
 
-#Ustalona trasa poczatkowa b
-b1 = c(1,4, 9, 10)
-b2 = c(2,3,5,8, 10)
-b3 = c(6,7,10)
 
-b = list(b1, b2, b3)
+#funkcja do sprawdzenia liczby przystankow 
+czy_n_przystankow <- function(pass){
+  n_przystankow <- c()
+  for(i in 1:length(b)){
+    n_przystankow[i] <- ifelse(length(b[[i]])>2, 1, 0)
+  }
+  return(sum(n_przystankow))}
 
 
-constraint <- function(pass){
+
+
+constraint_1 <- function(pass){
   check <- c()
   for(i in 1:3){
     check[i] <- ifelse(pass[i]<50,1,0)
   }
   return(sum(check))}
 
-
+constraint <- function(pass, buses){
+  check <- c()
+  for(i in 1:buses){
+    check[i] <- ifelse(pass[i]<50,1,0)
+  }
+  return(sum(check))}
 
 
 #Funkcja kosztow
@@ -73,6 +86,8 @@ f = function(b, D)
 }
 
 
+
+
 f2 = function(b, D)
 {
   number_buses = length(b)
@@ -90,14 +105,26 @@ f2 = function(b, D)
   return(y_list)
 }
 
-
-
-
-wyn =f2(b, Tk)
-
-constraint(wyn)
-
-
+repeat 
+{ 
+  #losujemy przystnaki dla kazdego busa
+  b = split(1:11, sample(3, 11 , repl = TRUE))
+  
+  
+  #dodajemy sgh na koncu "10"
+  for (i in 1:length(b))
+  {
+    b[[i]] = c(b[[i]], 12)
+    
+  }
+  
+  if(czy_n_przystankow(b) == 3 &
+     constraint_1(f2(b, Tk)) == 3) 
+  {
+    break
+  }
+  
+}
 
 t = 100
 alpha = 0.99
@@ -129,7 +156,7 @@ SA = function(stops, buses, x, D, f, f2, constraint, delta, t, alpha, maxIt)
           x_c[[bus]] = append(x_c[[bus]], stop, after = index-1)
           
           wyn = f2(x_c, D)
-          cons = constraint(wyn)
+          cons = constraint(wyn, buses)
           
         
           }
@@ -140,8 +167,13 @@ SA = function(stops, buses, x, D, f, f2, constraint, delta, t, alpha, maxIt)
       
       
     }
+<<<<<<< HEAD
     if (exists('cons') == FALSE) next
     if (cons < 3) next 
+=======
+    if (exists("cons") == FALSE) next
+    if (cons < buses) next
+>>>>>>> working
     
     # Symulacja przejscia do kandydata na rozwiazanie.
     A = min(1, exp(-(f(x_c, D) - f(x, D)) / t))
